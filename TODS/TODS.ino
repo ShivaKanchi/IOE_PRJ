@@ -31,7 +31,7 @@ pinMode(LED3 , OUTPUT);
 pinMode(BUZZER , OUTPUT);
 pinMode(trigPin, OUTPUT); 
 pinMode(echoPin, INPUT); 
-Serial.begin(9600);
+Serial(9600);
 }
 
 

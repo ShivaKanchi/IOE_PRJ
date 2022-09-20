@@ -38,6 +38,7 @@ if (distance >= 75) {
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
+    digitalWrite(BUZZER, LOW);
     Serial.print("4 Distance: ");
     Serial.println(distance);
     delay(1000);
@@ -57,6 +58,7 @@ if (distance >= 75) {
     digitalWrite(LED2, HIGH);
     delay(1000);
     digitalWrite(LED3, LOW);
+    digitalWrite(BUZZER, LOW);
     Serial.print("2 Distance: ");
     Serial.println(distance);
   }
@@ -65,6 +67,7 @@ if (distance >= 75) {
     delay(1000);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
+    digitalWrite(BUZZER, LOW);
     Serial.print("3 Distance: ");
     Serial.println(distance);
   }

@@ -89,6 +89,7 @@ if (!WaterLevel.publish(distance))
   {
     Serial.println("OK!");
   }
+delay(2000);
 
 if (distance >= 75) {
     digitalWrite(LED1, LOW);

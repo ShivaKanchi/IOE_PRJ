@@ -11,8 +11,28 @@
 #define AIO_KEY         "aio_ioco09MmbYAAwsNJm8UcGqFQPr3f" 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
+
 Adafruit_MQTT_Publish WaterLevel = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/WaterLevel");
 Adafruit_MQTT_Publish Buzzer = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Buzzer");
+
+void MQTT_Connect(){
+     if(mqtt.connected()){
+          return;
+       }
+     Serial.println("Connecting to MQTT...");
+     int retries = 3,status;
+     while((status = mqtt.connect()) != 0){
+          Serial.println(mqtt.connectErrorString(status));
+          Serial.println("Retrying after 5 secs....");
+          delay(5000);
+          retries--;
+          if(retries == 0){
+              while(1);   // reset the nodemcu
+            }
+      }
+      Serial.println("MQTT Connected");
+  }
+
 //pins
 const int trigPin = D0; 
 const int echoPin = D1; 
@@ -24,6 +44,7 @@ long duration;
 int distance;
 
  
+
 void setup() {
 pinMode(LED1 , OUTPUT);
 pinMode(LED2 , OUTPUT);
@@ -32,6 +53,15 @@ pinMode(BUZZER , OUTPUT);
 pinMode(trigPin, OUTPUT); 
 pinMode(echoPin, INPUT); 
 Serial(9600);
+Serial.println("Connecting to WiFi...");
+  WiFi.begin(ssid,pass);
+  while(WiFi.status()!= WL_CONNECTED){
+    Serial.print(".");
+    delay(500);
+    }
+  Serial.println("WiFi Connected !");
+  mqtt.publish(&toggle);
+  mqtt.publish(&slider);
 }
 
 
@@ -51,6 +81,14 @@ digitalWrite(trigPin, LOW);
 duration = pulseIn(echoPin, HIGH);
 distance= duration*0.034/2;
 
+if (!WaterLevel.publish(distance))
+  {
+    Serial.println("Failed");
+  }
+  else
+  {
+    Serial.println("OK!");
+  }
 
 if (distance >= 75) {
     digitalWrite(LED1, LOW);

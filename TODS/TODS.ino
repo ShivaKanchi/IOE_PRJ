@@ -9,10 +9,12 @@
 #define AIO_SERVERPORT  1883
 #define AIO_USERNAME    "shivakanchi"
 #define AIO_KEY         "aio_ioco09MmbYAAwsNJm8UcGqFQPr3f" 
+
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
-Adafruit_MQTT_Publish WaterLevel = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/WaterLevel");
-Adafruit_MQTT_Publish Buzzer = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Buzzer");
+Adafruit_MQTT_Publish WaterLevel = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/WaterLevel_TOD");
+Adafruit_MQTT_Publish Buzzer = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Buzzer_TOD");
+
 //pins
 const int trigPin = D0; 
 const int echoPin = D1; 

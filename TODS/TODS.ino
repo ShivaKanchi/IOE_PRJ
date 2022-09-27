@@ -33,7 +33,7 @@ pinMode(LED3 , OUTPUT);
 pinMode(BUZZER , OUTPUT);
 pinMode(trigPin, OUTPUT); 
 pinMode(echoPin, INPUT); 
-Serial(9600);
+Serial.begin(9600);
 
 Serial.println("Connecting to WiFi...");
   WiFi.begin(WLAN_SSID,WLAN_PASS);
@@ -46,6 +46,7 @@ Serial.println("Connecting to WiFi...");
 
 
 void loop() {  
+  
 digitalWrite(trigPin, LOW);
 delayMicroseconds(2);
 // Sets the trigPin on HIGH state for 10 micro seconds

@@ -7,13 +7,13 @@
 
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883
-#define AIO_USERNAME    "shivakanchi"
-#define AIO_KEY         "aio_ioco09MmbYAAwsNJm8UcGqFQPr3f" 
+#define AIO_USERNAME  "shivakanchi"
+#define AIO_KEY       "aio_mdjV48TSm7M5utr7SVZpGGuJnX64" 
 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
 Adafruit_MQTT_Publish WaterLevel = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/WaterLevel_TOD");
-Adafruit_MQTT_Publish Buzzer = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Buzzer_TOD");
+Adafruit_MQTT_Publish motor = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Buzzer_TOD");
 
 //pins
 const int trigPin = D0; 
@@ -22,6 +22,8 @@ const int LED1 = D2;
 const int LED2 = D3;
 const int LED3 = D4;
 const int BUZZER = D5;
+const int MOTOR = D6;
+int motorst=0;
 long duration;
 int distance;
 
@@ -66,6 +68,15 @@ if (!WaterLevel.publish(distance))
   {
     Serial.println("OK!");
   }
+  
+  if (!motor.publish(motorst))
+  {
+    Serial.println("Failed");
+  }
+  else
+  {
+    Serial.println("OK!");
+  }
   delay(3000);
 
 if (distance >= 75) {
@@ -83,13 +94,16 @@ if (distance >= 75) {
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, HIGH);
     digitalWrite(BUZZER, HIGH);
+    motorst=1;
     delay(500);
     Serial.print("1 Distance: ");
     Serial.println(distance);
+    
   }
   if (distance > 5 && distance <=35) {
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
+    motorst=1;
     delay(500);
     digitalWrite(LED3, LOW);
     digitalWrite(BUZZER, LOW);
@@ -98,6 +112,7 @@ if (distance >= 75) {
   }
   if (distance > 35 && distance <=75 ) {
     digitalWrite(LED1, HIGH);
+    motorst=0;
     delay(500);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);

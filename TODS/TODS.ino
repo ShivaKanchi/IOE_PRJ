@@ -8,12 +8,12 @@
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883
 #define AIO_USERNAME  "shivakanchi"
-#define AIO_KEY       "aio_mdjV48TSm7M5utr7SVZpGGuJnX64" 
+#define AIO_KEY       "aio_rSGF670BwQxHmo4LuixVUc1oKmXK"
 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
 Adafruit_MQTT_Publish WaterLevel = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/WaterLevel_TOD");
-Adafruit_MQTT_Publish motor = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Buzzer_TOD");
+Adafruit_MQTT_Publish MotorButton = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Motor_TOD");
 
 //pins
 const int trigPin = D0; 
@@ -62,22 +62,22 @@ distance= duration*0.034/2;
 MQTT_Connect();
 if (!WaterLevel.publish(distance))
   {
-    Serial.println("Failed");
+    Serial.println("Water Level Not Sent");
   }
   else
   {
-    Serial.println("OK!");
+    Serial.println("Water Level Sent");
   }
   
-  if (!motor.publish(motorst))
+  if (!MotorButton.publish(motorst))
   {
-    Serial.println("Failed");
+    Serial.println("Motor status Not Sent");
   }
   else
   {
-    Serial.println("OK!");
+    Serial.println("Motor status Sent");
   }
-  delay(3000);
+delay(3000);
 
 if (distance >= 75) {
     digitalWrite(LED1, LOW);
@@ -86,39 +86,38 @@ if (distance >= 75) {
     digitalWrite(BUZZER, LOW);
     Serial.print("4 Distance: ");
     Serial.println(distance);
-    delay(500);
-
+    motorst=0;
+    delay(100);
   }
   if (distance >= 0 && distance <= 5) {
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, HIGH);
     digitalWrite(BUZZER, HIGH);
-    motorst=1;
-    delay(500);
+    motorst=0;
     Serial.print("1 Distance: ");
     Serial.println(distance);
-    
+    delay(100);
   }
   if (distance > 5 && distance <=35) {
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
-    motorst=1;
-    delay(500);
+    motorst=0;
     digitalWrite(LED3, LOW);
     digitalWrite(BUZZER, LOW);
     Serial.print("2 Distance: ");
     Serial.println(distance);
-  }
+    delay(100);
+    }
   if (distance > 35 && distance <=75 ) {
     digitalWrite(LED1, HIGH);
-    motorst=0;
-    delay(500);
+    motorst=1;
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(BUZZER, LOW);
     Serial.print("3 Distance: ");
     Serial.println(distance);
+    delay(100);
   }
 }
 

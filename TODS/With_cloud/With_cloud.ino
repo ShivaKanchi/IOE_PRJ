@@ -8,7 +8,7 @@
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883
 #define AIO_USERNAME  "shivakanchi"
-#define AIO_KEY       "aio_InRl00JUuM3RJcOBAcpbi7BvUF6B"
+#define AIO_KEY       "aio_qqoT44CorsiLXy3lxCdZ3TiYCNsf"
 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
@@ -16,26 +16,25 @@ Adafruit_MQTT_Publish WaterLevel = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/f
 Adafruit_MQTT_Publish MotorButton = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/Motor_TOD");
 
 //pins
-const int trigPin = D0; 
-const int echoPin = D1; 
+const int trigPin = D0;
+const int echoPin = D1;
 const int LED1 = D2;
 const int LED2 = D3;
 const int LED3 = D4;
 const int BUZZER = D5;
-const int MOTOR = D7;
+const int MOTOR = D6;
 int motorst=0;
 long duration;
 int distance;
-int waterlvl;
- 
+
 void setup() {
 pinMode(LED1 , OUTPUT);
 pinMode(LED2 , OUTPUT);
 pinMode(LED3 , OUTPUT);
 pinMode(BUZZER , OUTPUT);
 pinMode(MOTOR , OUTPUT);
-pinMode(trigPin, OUTPUT); 
-pinMode(echoPin, INPUT); 
+pinMode(trigPin, OUTPUT);
+pinMode(echoPin, INPUT);
 Serial.begin(9600);
 
 Serial.println("Connecting to WiFi...");
@@ -45,11 +44,12 @@ Serial.println("Connecting to WiFi...");
     delay(500);
     }
   Serial.println("WiFi Connected !");
+ 
+  MQTT_Connect();
 }
 
+void loop() {
 
-void loop() {  
-  
 digitalWrite(trigPin, LOW);
 delayMicroseconds(2);
 // Sets the trigPin on HIGH state for 10 micro seconds
@@ -59,44 +59,13 @@ digitalWrite(trigPin, LOW);
 // Reads the echoPin, returns the sound wave travel time in microseconds
 duration = pulseIn(echoPin, HIGH);
 distance= duration*0.034/2;
-if(distance>100){
-  waterlvl=5;
-}else{
-waterlvl=100-distance;
-}
-MQTT_Connect();
-if (!WaterLevel.publish(waterlvl))
-  {
-    Serial.println("Water Level Not Sent");
-  }
-  else
-  {
-    Serial.println("Water Level Sent");
-  }
-  
-  if (!MotorButton.publish(motorst))
-  {
-    Serial.println("Motor status Not Sent");
-  }
-  else
-  {
-    Serial.println("Motor status Sent");
-  }
-delay(3000);
 
-if (distance >= 75) {
-    digitalWrite(LED1, LOW);
-    digitalWrite(LED2, LOW);
-    digitalWrite(LED3, LOW);
-    digitalWrite(BUZZER, LOW);
-    digitalWrite(MOTOR, HIGH);
-    Serial.print("4 Distance: ");
-    Serial.println(distance);
-    motorst=0;
-    waterlvl=10;
-    delay(100);
-  }
-  if (distance >= 0 && distance <= 5) {
+WaterLevel.publish(distance);
+MotorButton.publish(motorst);
+delay(1700);
+
+switch(distance){
+  case 0 ... 5 :
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, HIGH);
@@ -105,34 +74,81 @@ if (distance >= 75) {
     motorst=0;
     Serial.print("1 Distance: ");
     Serial.println(distance);
-    delay(100);
-  }
-  if (distance > 5 && distance <=35) {
+    break;
+  case 6 ... 35:
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
-    digitalWrite(MOTOR, HIGH);
     motorst=0;
+    digitalWrite(MOTOR, HIGH);
     digitalWrite(LED3, LOW);
     digitalWrite(BUZZER, LOW);
     Serial.print("2 Distance: ");
-    Serial.println(distance);
-    delay(100);
-    }
-  if (distance > 35 && distance <=75 ) {
+    Serial.println(distance);    
+    break;
+  case 36 ... 75:
     digitalWrite(LED1, HIGH);
-    digitalWrite(MOTOR, HIGH);
     motorst=1;
+    digitalWrite(LED3, HIGH);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(BUZZER, LOW);
     Serial.print("3 Distance: ");
     Serial.println(distance);
-    delay(100);
-  }
+    break;
+  default:
+    digitalWrite(MOTOR, LOW);
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, LOW);
+    digitalWrite(BUZZER, LOW);
+    Serial.print("4 Distance: ");
+    Serial.println(distance);
+    motorst=0;
+    break;
 }
+}
+//
+//
+//if (distance >= 0 && distance <= 5) {
+//    digitalWrite(LED1, HIGH);
+//    digitalWrite(LED2, HIGH);
+//    digitalWrite(LED3, HIGH);
+//    digitalWrite(BUZZER, HIGH);
+//    motorst=0;
+//    Serial.print("1 Distance: ");
+//    Serial.println(distance);
+//  }
+//  else if (distance > 5 && distance <=35) {
+//    digitalWrite(LED1, HIGH);
+//    digitalWrite(LED2, HIGH);
+//    motorst=0;
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("2 Distance: ");
+//    Serial.println(distance);    
+//    }
+//  else if (distance > 35 && distance <=75 ) {
+//    digitalWrite(LED1, HIGH);
+//    motorst=1;
+//    digitalWrite(LED2, LOW);
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("3 Distance: ");
+//    Serial.println(distance);
+//  }
+//  else if (distance >= 75) {
+//    digitalWrite(LED1, LOW);
+//    digitalWrite(LED2, LOW);
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("4 Distance: ");
+//    Serial.println(distance);
+//    motorst=0;
+//  }
+//}
 
 void MQTT_Connect(){
-     if(mqtt.connected()){
+     if(mqtt.connected()){        
           return;
        }
      Serial.println("Connecting to MQTT...");

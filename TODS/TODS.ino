@@ -138,3 +138,90 @@ void MQTT_Connect(){
       }
       Serial.println("MQTT Connected");
   }
+
+
+
+
+
+//switch(distance){
+//  case 0 ... 5 :
+//    digitalWrite(LED1, HIGH);
+//    digitalWrite(LED2, HIGH);
+//    digitalWrite(LED3, HIGH);
+//    digitalWrite(BUZZER, HIGH);
+//    digitalWrite(MOTOR, LOW);
+//    motorst=0;
+//    Serial.print("1 Distance: ");
+//    Serial.println(distance);
+//    break;
+//  case 6 ... 35:
+//    digitalWrite(LED1, HIGH);
+//    digitalWrite(LED2, HIGH);
+//    motorst=0;
+//    digitalWrite(MOTOR, HIGH);
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("2 Distance: ");
+//    Serial.println(distance);    
+//    break;
+//  case 36 ... 75:
+//    digitalWrite(LED1, HIGH);
+//    motorst=1;
+//    digitalWrite(LED3, HIGH);
+//    digitalWrite(LED2, LOW);
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("3 Distance: ");
+//    Serial.println(distance);
+//    break;
+//  default:
+//    digitalWrite(MOTOR, LOW);
+//    digitalWrite(LED1, LOW);
+//    digitalWrite(LED2, LOW);
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("4 Distance: ");
+//    Serial.println(distance);
+//    motorst=0;
+//    break;
+//}
+//}
+//
+//
+//if (distance >= 0 && distance <= 5) {
+//    digitalWrite(LED1, HIGH);
+//    digitalWrite(LED2, HIGH);
+//    digitalWrite(LED3, HIGH);
+//    digitalWrite(BUZZER, HIGH);
+//    motorst=0;
+//    Serial.print("1 Distance: ");
+//    Serial.println(distance);
+//  }
+//  else if (distance > 5 && distance <=35) {
+//    digitalWrite(LED1, HIGH);
+//    digitalWrite(LED2, HIGH);
+//    motorst=0;
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("2 Distance: ");
+//    Serial.println(distance);    
+//    }
+//  else if (distance > 35 && distance <=75 ) {
+//    digitalWrite(LED1, HIGH);
+//    motorst=1;
+//    digitalWrite(LED2, LOW);
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("3 Distance: ");
+//    Serial.println(distance);
+//  }
+//  else if (distance >= 75) {
+//    digitalWrite(LED1, LOW);
+//    digitalWrite(LED2, LOW);
+//    digitalWrite(LED3, LOW);
+//    digitalWrite(BUZZER, LOW);
+//    Serial.print("4 Distance: ");
+//    Serial.println(distance);
+//    motorst=0;
+//  }
+//}

@@ -2,11 +2,11 @@
 //pins
 const int trigPin = D0; 
 const int echoPin = D1; 
-const int LED1 = D2;//green
-const int LED2 = D3;//yellow
-const int LED3 = D4;//red
-const int BUZZER = D6;
-const int MOTOR = D5;//relay,motor
+const int LED1 = D5;//green
+const int LED2 = D6;//yellow
+const int LED3 = D7;//red
+const int BUZZER = D2;
+const int MOTOR = D4;//relay,motor
 int motorst=0;
 long duration;
 int distance;
@@ -16,6 +16,7 @@ pinMode(LED1 , OUTPUT);
 pinMode(LED2 , OUTPUT);
 pinMode(LED3 , OUTPUT);
 pinMode(BUZZER , OUTPUT);
+pinMode(MOTOR , OUTPUT);
 pinMode(trigPin, OUTPUT); 
 pinMode(echoPin, INPUT); 
 Serial.begin(9600);
@@ -60,7 +61,7 @@ distance= duration*0.034/2;
     }
   else if (distance >= 36 && distance <=75 ) {
     digitalWrite(LED1, HIGH);
-    digitalWrite(MOTOR,LOW);
+    digitalWrite(MOTOR,HIGH);
     delay(1000);
     motorst=1;
     digitalWrite(LED2, LOW);
@@ -68,7 +69,6 @@ distance= duration*0.034/2;
     digitalWrite(BUZZER, LOW);
     Serial.print("3 Distance: ");
     Serial.println(distance);
-    delay(1000);
   }
    else if (distance >= 76) {
     digitalWrite(LED1, LOW);
@@ -79,7 +79,4 @@ distance= duration*0.034/2;
     Serial.print("4 Distance: ");
     Serial.println(distance);
     motorst=0;
-    delay(1000);
-  }
-  
-}
+    delay(1

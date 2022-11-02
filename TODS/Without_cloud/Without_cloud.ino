@@ -22,8 +22,9 @@ pinMode(echoPin, INPUT);
 Serial.begin(9600);
 }
 //loop
-void loop() {  
-  
+void loop() { 
+   
+//calculating water distance from sensor
 digitalWrite(trigPin, LOW);
 delayMicroseconds(2);
 // Sets the trigPin on HIGH state for 10 micro seconds
@@ -36,7 +37,7 @@ distance= duration*0.034/2;
 
 //contitions
 
-  if (distance >= 0 && distance <= 5) {
+  if (distance >= 0 && distance <= 9) {
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, HIGH);
@@ -47,7 +48,7 @@ distance= duration*0.034/2;
     Serial.print("1 Distance: ");
     Serial.println(distance);
   }
-  else if (distance >= 6 && distance <= 35) {
+  else if (distance >= 10 && distance <= 49) {
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(MOTOR,HIGH);
@@ -59,7 +60,7 @@ distance= duration*0.034/2;
     Serial.println(distance);
     
     }
-  else if (distance >= 36 && distance <=75 ) {
+  else if (distance >= 50 && distance <=75 ) {
     digitalWrite(LED1, HIGH);
     digitalWrite(MOTOR,HIGH);
     delay(1000);
@@ -79,4 +80,6 @@ distance= duration*0.034/2;
     Serial.print("4 Distance: ");
     Serial.println(distance);
     motorst=0;
-    delay(1
+    delay(1000);
+   }
+}   

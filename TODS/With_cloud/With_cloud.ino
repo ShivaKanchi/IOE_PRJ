@@ -7,7 +7,7 @@
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883
 #define AIO_USERNAME  "shivakanchi"
-#define AIO_KEY       ""
+#define AIO_KEY       "aio_VqmD00DpmZIHEin8Gu973DuHztfL"
 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
@@ -24,8 +24,8 @@ const int BUZZER = D2;
 const int MOTOR = D4;//relay,motor
 int motorst=0;//0=off 1=on
 long duration;
-int distance;
-
+float distance;
+int waterperc;
 void setup() {
   
 pinMode(LED1 , OUTPUT);
@@ -63,25 +63,27 @@ distance= duration*0.034/2;
 
 
 //contitions
-  if (distance > 0 && distance <= 10) {
+  if (distance > 0 && distance <= 7) {
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, HIGH);
     digitalWrite(BUZZER, HIGH);
     digitalWrite(MOTOR,HIGH);
     motorst=0;
-    WaterLevel.publish(100-distance);
+    Serial.println((int)((distance/23.0)*100.0));  
+    WaterLevel.publish(100-((int)((distance/23.0)*100.0)));
     MotorButton.publish(motorst);  
     Serial.print("1 Distance: ");
     Serial.println(distance);
     delay(4000);
   }
-  else if (distance > 10 && distance <= 40) {
+  else if (distance > 7 && distance <= 12) {
     digitalWrite(LED1, HIGH);
     digitalWrite(LED2, HIGH);
     digitalWrite(MOTOR,LOW);
     motorst=1;
-    WaterLevel.publish(100-distance);
+    Serial.println((int)((distance/23.0)*100.0));
+    WaterLevel.publish(100-((int)((distance/23.0)*100.0)));
     MotorButton.publish(motorst);
     digitalWrite(LED3, LOW);
     digitalWrite(BUZZER, LOW);
@@ -89,12 +91,12 @@ distance= duration*0.034/2;
     Serial.println(distance);
     delay(4000);
     }
-  else if (distance > 40 && distance <= 75 ) {
+  else if (distance > 12 && distance <= 22 ) {
     digitalWrite(LED1, HIGH);
     digitalWrite(MOTOR,LOW);
     motorst=1;
-    WaterLevel.publish(100-distance);
-    MotorButton.publish(motorst);
+        Serial.println((int)((distance/23.0)*100.0));
+        WaterLevel.publish(100-((int)((distance/23.0)*100.0)));
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
     digitalWrite(BUZZER, LOW);
@@ -102,7 +104,7 @@ distance= duration*0.034/2;
     Serial.println(distance);
     delay(4000);
   }
-   else if (distance > 75 && distance <=100) {
+   else if (distance > 22 && distance <=22) {
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
@@ -111,8 +113,9 @@ distance= duration*0.034/2;
     Serial.print("4 Distance: ");
     Serial.println(distance);
     motorst=1;
-    WaterLevel.publish(100-distance);
-    MotorButton.publish(motorst);
+        Serial.println((int)((distance/23.0)*100.0));
+        WaterLevel.publish(100-((int)((distance/23.0)*100.0)));
+        MotorButton.publish(motorst);
     delay(4000);
    }
    else if (distance > 100 ) {
@@ -124,7 +127,8 @@ distance= duration*0.034/2;
     Serial.print("5 Distance: ");
     Serial.println(distance);
     motorst=0;
-    WaterLevel.publish(1);
+    Serial.println(100-((int)((distance/23.0)*100.0)));
+      WaterLevel.publish(1);
     MotorButton.publish(motorst);
     delay(4000);
    }
